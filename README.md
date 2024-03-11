@@ -1,27 +1,22 @@
-# UsersApp
+C:\Users\User\angular\microfrontends\module-federation-updated>ng new usersApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.3.
 
-## Development server
+C:\Users\User\angular\microfrontends\module-federation-updated\usersApp>ng add @angular-architects/module-federation@"^16.0.4" --port 5008
+ℹ Using package manager: npm
+✔ Package information loaded.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+The package @angular-architects/module-federation@^16.0.4 will be installed and executed.
+Would you like to proceed? Yes
+✔ Packages successfully installed.
+? Project name (press enter for default project) usersApp
+CREATE webpack.config.js (1588 bytes)
+CREATE webpack.prod.config.js (46 bytes)
+CREATE src/bootstrap.ts (214 bytes)
+UPDATE tsconfig.json (823 bytes)
+UPDATE tsconfig.app.json (185 bytes)
+UPDATE angular.json (2650 bytes)
+UPDATE package.json (1230 bytes)
+UPDATE src/main.ts (58 bytes)
+✔ Packages installed successfully.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+C:\Users\User\angular\microfrontends\module-federation-updated\usersApp>
