@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-users-app-config
+
+data:
+  env: "dev"
+
