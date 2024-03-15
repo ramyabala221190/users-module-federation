@@ -5,5 +5,5 @@ metadata:
 
 data:
   env: {{.Values.environment}}
-  host: {{.Values.host.uat}}
+  host: "{{.Values.host.uat}}"
 
