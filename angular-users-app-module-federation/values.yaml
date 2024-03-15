@@ -18,9 +18,9 @@ services:
    prod: 30028
 
 host:
- dev: 30004
- uat: 30014
- prod: 30024
+ dev: '30004'
+ uat: '30014'
+ prod: '30024'
 
 environment: ""
 
