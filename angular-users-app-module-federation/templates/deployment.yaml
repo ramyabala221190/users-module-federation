@@ -25,10 +25,39 @@ spec:
          - name: {{.Values.config.volume}}
            mountPath: /{{.Values.config.mountPath}}
            readOnly: true
+         - name: common-{{.Values.config.volume}}
+           mountPath: /{{.Values.config.mountPath}}
+           readOnly: true
+         env:
+           - name: nginxPort
+             valueFrom:
+               configMapKeyRef:
+              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+                  name: common-{{.Values.config.name}}
+              # Specify the key associated with the value
+                  key: nginxPort
+           - name: dockerHost
+             valueFrom:
+               configMapKeyRef:
+              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+                  name: common-{{.Values.config.name}}
+              # Specify the key associated with the value
+                  key: dockerHost
+           - name: host
+             valueFrom:
+               configMapKeyRef:
+              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+                  name: {{.Values.environment}}-{{.Values.config.name}}
+              # Specify the key associated with the value
+                  key: host
      volumes:
      - name: {{.Values.config.volume}}
        configMap:
          name: {{.Values.environment}}-{{.Values.config.name}}
+     - name: common-{{.Values.config.volume}}
+       configMap:
+         name: common-{{.Values.config.name}}
+
 #we are loading all environment variables from the config map with name :dev-app-config
 
 

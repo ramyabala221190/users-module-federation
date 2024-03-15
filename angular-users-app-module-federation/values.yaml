@@ -8,12 +8,19 @@ pod:
 services:
   name: "service"
   type: NodePort  #due to external IP pending issue, changed from LoadBalancer to NodePort
-  devAppPort: 8086
-  uatAppPort: 8087
-  prodAppPort: 8088
-  nodeDevPort: 30008
-  nodeUatPort: 30018
-  nodeProdPort: 30028
+  app:
+   dev: 8089
+   uat: 8090
+   prod: 8091
+  node:
+   dev: 30008
+   uat: 30018
+   prod: 30028
+
+host:
+ dev: 30004
+ uat: 30014
+ prod: 30024
 
 environment: ""
 

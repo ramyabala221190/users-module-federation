@@ -4,5 +4,6 @@ metadata:
   name: uat-users-app-config
 
 data:
-  env: "uat"
+  env: {{.Values.environment}}
+  host: {{.Values.host.uat}}
 

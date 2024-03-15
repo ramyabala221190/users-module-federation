@@ -4,5 +4,6 @@ metadata:
   name: prod-users-app-config
 
 data:
-  env: "prod"
+  env: {{.Values.environment}}
+  host: {{.Values.host.prod}}
 

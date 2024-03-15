@@ -4,5 +4,6 @@ metadata:
   name: dev-users-app-config
 
 data:
-  env: "dev"
+  env: {{.Values.environment}}
+  host: {{.Values.host.dev}}
 
