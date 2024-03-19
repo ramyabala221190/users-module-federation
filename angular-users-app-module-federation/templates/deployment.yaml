@@ -36,13 +36,13 @@ spec:
                   name: common-{{.Values.config.name}}
               # Specify the key associated with the value
                   key: nginxPort
-           - name: dockerHost
+           - name: hostName
              valueFrom:
                configMapKeyRef:
               # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
                   name: common-{{.Values.config.name}}
               # Specify the key associated with the value
-                  key: dockerHost
+                  key: hostName
            - name: host
              valueFrom:
                configMapKeyRef:
