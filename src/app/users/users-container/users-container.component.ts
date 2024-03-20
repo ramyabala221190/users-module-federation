@@ -13,6 +13,7 @@ export class UsersContainerComponent {
   appName:string="usersApp";
 
   ngOnInit(){
-    this.config=this.envConfigService.getConfiguration()[this.appName];
+    console.log(this.envConfigService.getConfiguration(this.appName))
+    this.config=this.envConfigService.getConfiguration(this.appName);
     }
 }
