@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnvConfigService, envConfigModel } from 'src/app/env-config.service';
+import { ModuleFederationConfigLibService, configModel } from 'module-federation-config-lib';
 
 @Component({
   selector: 'app-users-container',
@@ -7,11 +7,12 @@ import { EnvConfigService, envConfigModel } from 'src/app/env-config.service';
   styleUrls: ['./users-container.component.scss']
 })
 export class UsersContainerComponent {
-  constructor(private envConfigService:EnvConfigService){}
+  constructor(private envConfigService:ModuleFederationConfigLibService){}
 
-  config:envConfigModel|undefined;
+  config:configModel|undefined;
+  appName:string="usersApp";
 
   ngOnInit(){
-    this.config=this.envConfigService.fetchEnvConfig();
+    this.config=this.envConfigService.getConfiguration()[this.appName];
     }
 }
