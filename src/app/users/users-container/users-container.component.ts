@@ -1,5 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { ModuleFederationConfigLibService, configModel } from 'module-federation-config-lib';
+import { ModuleFederationConfigLibModule, ModuleFederationConfigLibService, configModel } from 'module-federation-config-lib';
+import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { appName } from '../users.module';
 
 @Component({
@@ -8,13 +11,13 @@ import { appName } from '../users.module';
   styleUrls: ['./users-container.component.scss']
 })
 export class UsersContainerComponent {
-  constructor(private envConfigService:ModuleFederationConfigLibService,@Inject(appName)public appName:string){}
+  constructor(private activeRoute:ActivatedRoute,@Inject(appName)public appName:string,private envConfigLibService:ModuleFederationConfigLibService){}
 
-  config:configModel|undefined;
+  config:Observable<any>|undefined; //for lazy method
+  //config:configModel|undefined; //for eager method
 
   ngOnInit(){
-    console.log(this.appName)
-    console.log(this.envConfigService.getConfiguration(this.appName))
-    this.config=this.envConfigService.getConfiguration(this.appName);
+    //this.config=this.envConfigLibService.getConfiguration(this.appName) //for eager method
+    this.config=this.activeRoute.data; //for laxy method
     }
 }

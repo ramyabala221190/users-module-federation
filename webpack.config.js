@@ -30,7 +30,7 @@ module.exports = {
 
         // For remotes (please adjust)
         name: "usersApp",
-        filename: "remoteUsersApp.js",
+        filename: "remote-usersApp.js",
         exposes: {
             './myUsersModule': './src/app/users/users.module.ts',
         },        
