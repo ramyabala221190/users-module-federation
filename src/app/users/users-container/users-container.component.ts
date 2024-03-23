@@ -13,11 +13,11 @@ import { appName } from '../users.module';
 export class UsersContainerComponent {
   constructor(private activeRoute:ActivatedRoute,@Inject(appName)public appName:string,private envConfigLibService:ModuleFederationConfigLibService){}
 
-  config:Observable<any>|undefined; //for lazy method
-  //config:configModel|undefined; //for eager method
+  //config:Observable<any>|undefined; //for lazy method
+  config:configModel|undefined; //for eager method
 
   ngOnInit(){
-    //this.config=this.envConfigLibService.getConfiguration(this.appName) //for eager method
-    this.config=this.activeRoute.data; //for laxy method
+    this.config=this.envConfigLibService.getConfiguration(this.appName) //for eager method
+    //this.config=this.activeRoute.data; //for laxy method
     }
 }

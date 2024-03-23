@@ -1,12 +1,12 @@
-<h4>Second MicroFrontEnd Loaded({{(config|async)?.configDetails?.env}})</h4>
+<!-- <h4>Second MicroFrontEnd Loaded({{(config|async)?.configDetails?.env}})</h4> -->
 
  <!--eager method below to access the environment name-->
-    <!-- <h4>Second MicroFrontEnd Loaded({{config?.env}})</h4> -->
+    <h4>Second MicroFrontEnd Loaded({{config?.env}})</h4>
 
-<img src="/{{(config|async)?.appName}}/assets/user-logo.png">
+<!-- <img src="/{{(config|async)?.appName}}/assets/user-logo.png"> -->
 
  <!--eager method below to access application name-->
-    <!-- <img src="/{{appName}}/assets/user-logo.png"> -->
+    <img src="/{{appName}}/assets/user-logo.png">
 
 <button class="btn btn-primary" [routerLink]="['list']">Load Users</button>
 
