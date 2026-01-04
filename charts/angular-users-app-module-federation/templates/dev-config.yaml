@@ -1,9 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: uat-users-app-config
+  name: dev-users-app-config
 
 data:
   env: {{.Values.environment}}
-  host: "{{.Values.host.uat}}"
 

@@ -1,0 +1,19 @@
+
+pod:
+ containerName: "container"
+ imageName: ""
+ containerPort: 80  # port nginx container is listening on in the pod
+
+environment: ""
+
+appName: "usersApp"
+
+services:
+  name: "usersapp-service"
+  type: ClusterIP
+  port: 8081  # this is the port on which the ClusterIP service listens on 
+ 
+config:
+  name: users-app-config
+  volume: users-app-config-vol
+  mountPath: config
