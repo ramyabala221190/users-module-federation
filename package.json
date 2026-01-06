@@ -18,10 +18,10 @@
     "set-context-dev":"kubectl config set-context --current --namespace=dev-namespace",
     "set-context-uat":"kubectl config set-context --current --namespace=uat-namespace",
     "set-context-prod":"kubectl config set-context --current --namespace=prod-namespace",
-    "helm-pack":"helm package --version=1.0.1 ./charts/angular-users-app-module-federation/",
+    "helm-pack":"helm package --version=1.0.1 ./charts/angular-users-app-module-federation/ --destination ./artifacts",
     "helm-upgrade-dev":"helm upgrade users-app-release ./charts/angular-users-app-module-federation/ --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:7 --set environment=dev",
-    "helm-upgrade-uat":"helm upgrade users-app-release ./angular-users-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:7 --set environment=uat",
-    "helm-upgrade-prod":"helm upgrade users-app-release ./angular-users-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:7 --set environment=prod"
+    "helm-upgrade-uat":"helm upgrade users-app-release ./artifacts/angular-users-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:7 --set environment=uat",
+    "helm-upgrade-prod":"helm upgrade users-app-release ./artifacts/angular-users-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:7 --set environment=prod"
 
   },
   "private": true,

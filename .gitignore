@@ -8,6 +8,8 @@
 *.tgz
 *.log
 
+/artifacts
+
 # Node
 /node_modules
 npm-debug.log

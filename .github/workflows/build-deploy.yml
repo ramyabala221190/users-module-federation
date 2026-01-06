@@ -68,7 +68,7 @@ jobs:
               # added the dockerhub username as repo variable and password as repo secret
 
 
-          - name: Build Docker image for express app
+          - name: Build Docker image for Users app
           # executed only for dev
             if: ${{ github.event.inputs.environment == 'dev' }}
             uses: docker/build-push-action@v5
