@@ -1,13 +1,15 @@
 <table class="table table-bordered">
     <thead>
     <tr>
+        <th>ID</th>
         <th>Name</th>
         <th></th>
     </tr>
 </thead>
 <tbody>
     <tr *ngFor="let user of usersList$|async">
-        <td>{{user.id}}. {{user.name}}</td>
+        <td>{{user.id}}</td>
+        <td>{{user.name}}</td>
         <td><button class="btn btn-success" [routerLink]="['/','users','detail',user.id]">View Details</button></td>
     </tr>
 </tbody>
