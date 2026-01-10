@@ -47,23 +47,34 @@ jobs:
              var3: This is step level env var accessible only in this step
 
 
-          - name : Set Docker Image tag
-            run: |
-                  if [ -n "${{ github.event.inputs.tag }}" ]; then
-                     echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
-                  else
-                     echo "TAG=${{ github.event.workflow_run.outputs.image_tag }}" >> $GITHUB_ENV
-                  fi
+          - name: Set Docker Image tag 
+            run: | 
+              if [ -n "$INPUT_TAG" ]; then 
+                echo "TAG=$INPUT_TAG" >> $GITHUB_ENV 
+              else 
+                echo "TAG=$WORKFLOW_IMAGE_TAG" >> $GITHUB_ENV 
+              fi 
+            env: 
+              INPUT_TAG: ${{ github.event.inputs.tag }} 
+              WORKFLOW_IMAGE_TAG: ${{ github.event.workflow_run.outputs.image_tag }}
 
           - name: Set Helm Chart version
             run : |
-                  if [ -n "$VERSION" ]; then
-                     echo "VERSION=$VERSION" >> $GITHUB_ENV
+                  if [ -n "$INPUT_VERSION" ]; then
+                     echo "VERSION=$INPUT_VERSION" >> $GITHUB_ENV
                   else
-                     echo "VERSION=${{ github.event.workflow_run.outputs.chart_version }}" >> $GITHUB_ENV
+                     echo "VERSION=$WORKFLOW_CHART_VERSION" >> $GITHUB_ENV
                   fi
-        
+            env: 
+              INPUT_VERSION: ${{ github.event.inputs.version }} 
+              WORKFLOW_CHART_VERSION: ${{ github.event.workflow_run.outputs.chart_version }}
 
+          
+          - name: Debug
+            run: | 
+              echo "TAG=$TAG" 
+              echo "VERSION=$VERSION"
+        
           - name: Validate empty inputs
           #  -z does the empty string check. dont use env.TAG or env.VERSION. Use run time values
             run: |
