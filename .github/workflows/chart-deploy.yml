@@ -42,6 +42,13 @@ jobs:
             env:
              var3: This is step level env var accessible only in this step
 
+          - name: Debug workflow_run outputs
+            run: |
+               echo "workflow_run image_tag: $WORKFLOW_IMAGE_TAG"
+               echo "workflow_run chart_version: $WORKFLOW_CHART_VERSION"
+            env:
+             WORKFLOW_IMAGE_TAG: ${{ github.event.workflow_run.outputs.image_tag }}
+             WORKFLOW_CHART_VERSION: ${{ github.event.workflow_run.outputs.chart_version }}
 
           - name: Set Docker Image tag 
             run: | 
