@@ -2,17 +2,16 @@ name: Deploy-Chart
 
 on: 
   workflow_run: 
-    workflows: ["Build-Deploy-Users-App"] # auto-trigger after App Build finishes 
+    workflows: ["Build-Deploy-Users-App"] # auto-trigger after Build-Deploy-Users-App finishes 
     types: 
      - completed
   workflow_dispatch: # manual trigger from Github
    inputs:
      environment:
         type: choice
-        description: "Specify the environment(dev,uat or prod)"
+        description: "Specify the environment(dev,uat)"
         options:
           - dev
-          - prod
           - uat
         required: true
         default: 'dev'
@@ -58,19 +57,19 @@ jobs:
 
           - name: Set Helm Chart version
             run : |
-                  if [ -n "${{ github.event.inputs.version }}" ]; then
-                     echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+                  if [ -n "$VERSION" ]; then
+                     echo "VERSION=$VERSION" >> $GITHUB_ENV
                   else
                      echo "VERSION=${{ github.event.workflow_run.outputs.chart_version }}" >> $GITHUB_ENV
                   fi
         
 
           - name: Validate empty inputs
-          #  -z does the empty string check
+          #  -z does the empty string check. dont use env.TAG or env.VERSION. Use run time values
             run: |
-             if [[ -z "${{ env.TAG }}" || -z "${{ env.VERSION }}" ]]; then
-             echo "ERROR: Chart version and Image tag is required for chart deployment"
-             exit 1
+             if [[ -z "$TAG" || -z "$VERSION" ]]; then
+               echo "ERROR: Chart version and Image tag are required for chart deployment"
+               exit 1
              fi
           
           # - name: Set conditional env
@@ -137,14 +136,14 @@ jobs:
           - name: Helm package and push to DockerHub
             if: ${{ github.event.inputs.environment == 'dev' }}
             run : |
-               helm package --version=${{ github.event.inputs.version }} ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
-               helm push ./artifacts/${{vars.HELM_CHART_NAME}}-${{ github.event.inputs.version }}.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/
+               helm package --version=$VERSION ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
+               helm push ./artifacts/${{vars.HELM_CHART_NAME}}-$VERSION.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/
           
           - name: Helm Upgrade
             run: |
                helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/${{vars.HELM_CHART_NAME}} \
-               --version ${{ github.event.inputs.version }} \
+               --version $VERSION \
                --install --debug \
-               --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
+               --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:$TAG  \
                --set environment=${{ github.event.inputs.environment }}
 
