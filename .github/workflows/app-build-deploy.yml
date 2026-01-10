@@ -110,6 +110,7 @@ jobs:
           #      --set environment=${{ github.event.inputs.environment }}
   
   helm-upgrade:
+    needs: build-and-deploy
     permissions: 
          id-token: write # required for OIDC 
          contents: read # required for actions/checkout
