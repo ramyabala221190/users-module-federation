@@ -50,41 +50,33 @@ jobs:
           - name: Set chart version 
             id: set-version 
             run: echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT 
+
+          - name: Debug outputs
+            run: |
+              echo "tag=${{ steps.set-tag.outputs.tag }}"
+              echo "version=${{ steps.set-version.outputs.version }}"
+
         
-          # - name: Validate PROD inputs
-          # # for prod deployments the tag input from the user must not be empty. -z does the empty string check
-          #   run: |
-          #    if [[ "${{ github.event.inputs.environment }}" != "dev" && -z "${{ github.event.inputs.tag }}" ]]; then
-          #    echo "ERROR: tag is required for PROD/UAT deployments"
-          #    exit 1
-          #    fi
-          
-          # - name: Set conditional env
-          # # for prod we overwriting the value of the tab env variable to the tag input provided by the user.
-          #   run: |
-          #    if [[ "${{ github.event.inputs.environment }}" == "prod" || "${{ github.event.inputs.environment }}" == "uat" ]]; then
-          #    echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
-          #    fi
-
-          - name: Login to DockerHub
-          # executed only for dev
-            if: ${{ github.event.inputs.environment == 'dev' }}
-            uses: docker/login-action@v3
-            with:
-              username: ${{vars.DOCKERHUB_USERNAME}}
-              password: ${{secrets.DOCKERHUB_PASSWORD}}
-              # added the dockerhub username as repo variable and password as repo secret
+         
+          # - name: Login to DockerHub
+          # # executed only for dev
+          #   if: ${{ github.event.inputs.environment == 'dev' }}
+          #   uses: docker/login-action@v3
+          #   with:
+          #     username: ${{vars.DOCKERHUB_USERNAME}}
+          #     password: ${{secrets.DOCKERHUB_PASSWORD}}
+          #     # added the dockerhub username as repo variable and password as repo secret
 
 
-          - name: Build Docker image for Users app
-          # executed only for dev
-            if: ${{ github.event.inputs.environment == 'dev' }}
-            uses: docker/build-push-action@v5
-            with:
-              push: true  # so that image is pushed to Dockerhub as well
-              context: .   # this ensures the paths in the Dockerfile work as expected
-              file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
-              tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
+          # - name: Build Docker image for Users app
+          # # executed only for dev
+          #   if: ${{ github.event.inputs.environment == 'dev' }}
+          #   uses: docker/build-push-action@v5
+          #   with:
+          #     push: true  # so that image is pushed to Dockerhub as well
+          #     context: .   # this ensures the paths in the Dockerfile work as expected
+          #     file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
+          #     tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
 
           # - name: Azure CLI Upgrade
           #   run: |
