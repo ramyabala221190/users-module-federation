@@ -59,7 +59,7 @@ jobs:
               fi 
             env: 
               INPUT_TAG: ${{ github.event.inputs.tag }} 
-              WORKFLOW_IMAGE_TAG: ${{ github.event.workflow_run.outputs.image_tag }}
+              WORKFLOW_IMAGE_TAG: ${{ github.event.workflow_run.jobs.build-and-deploy.outputs.image_tag}}
 
           - name: Set Helm Chart version
             run : |
@@ -70,7 +70,7 @@ jobs:
                   fi
             env: 
               INPUT_VERSION: ${{ github.event.inputs.version }} 
-              WORKFLOW_CHART_VERSION: ${{ github.event.workflow_run.outputs.chart_version }}
+              WORKFLOW_CHART_VERSION: ${{ github.event.workflow_run.jobs.build-and-deploy.outputs.chart_version }}
 
           
           - name: Debug
