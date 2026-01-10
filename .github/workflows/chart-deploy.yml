@@ -9,6 +9,9 @@ on:
       chart_version:
         required: false
         type: string
+      environment:
+        required: true
+        type: string
   workflow_dispatch: # manual trigger from Github
    inputs:
      environment:
@@ -76,6 +79,20 @@ jobs:
               WORKFLOW_CHART_VERSION: ${{ inputs.chart_version }}
 
           
+          - name: Set environment
+            run : |
+                if [ -n "$INPUT_ENV" ]; then
+                     echo "ENV=$INPUT_ENV" >> $GITHUB_ENV
+                else
+                     echo "ENV=$WORKFLOW_ENV" >> $GITHUB_ENV
+                fi
+            env: 
+              INPUT_ENV: ${{ github.event.inputs.environment }} 
+              WORKFLOW_ENV: ${{ inputs.environment }}
+
+              
+
+          
           - name: Debug
             run: | 
               echo "TAG=$TAG" 
@@ -114,8 +131,8 @@ jobs:
 
           - name : Create Namespace and Set context
             run: |
-               kubectl create namespace ${{ github.event.inputs.environment }}-namespace --dry-run=client -o yaml | kubectl apply -f -
-               kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
+               kubectl create namespace $ENV-namespace --dry-run=client -o yaml | kubectl apply -f -
+               kubectl config set-context --current --namespace=$ENV-namespace
 
           - name: Login to Docker Hub for Helm 
             env: 
@@ -125,7 +142,7 @@ jobs:
               helm registry login registry-1.docker.io --username "$DOCKERHUB_REGISTRY_USERNAME" --password "$DOCKERHUB_REGISTRY_PA_TOKEN"
           
           - name: Helm package and push to DockerHub
-            if: ${{ github.event.inputs.environment == 'dev' }}
+            if: ${{ env.ENV == 'dev' }}
             run : |
                helm package --version=$VERSION ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
                helm push ./artifacts/${{vars.HELM_CHART_NAME}}-$VERSION.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/
@@ -136,5 +153,5 @@ jobs:
                --version $VERSION \
                --install --debug \
                --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:$TAG  \
-               --set environment=${{ github.event.inputs.environment }}
+               --set environment=$ENV
 

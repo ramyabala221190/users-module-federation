@@ -118,4 +118,5 @@ jobs:
     with:
       image_tag: ${{ github.run_id }} 
       chart_version: ${{ github.event.inputs.version }}
+      environment: ${{ github.event.inputs.environment }}
 
