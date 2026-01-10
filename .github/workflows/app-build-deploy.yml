@@ -28,8 +28,8 @@ jobs:
   build-and-deploy:
        runs-on: ubuntu-latest
        outputs: 
-         image_tag: ${{ github.run_id }}
-         chart_version: ${{ github.event.inputs.version }} 
+        image_tag: ${{ steps.set-tag.outputs.tag }} 
+        chart_version: ${{ steps.set-version.outputs.version }}
        permissions: 
          id-token: write # required for OIDC 
          contents: read # required for actions/checkout
@@ -41,9 +41,16 @@ jobs:
           - name: Checkout repository
             uses: actions/checkout@v4 
             env:
-             var3: This is step level env var accessible only in this step  
-        
+             var3: This is step level env var accessible only in this step 
 
+          - name: Set image tag 
+            id: set-tag 
+            run: echo "tag=${GITHUB_RUN_ID}" >> $GITHUB_OUTPUT 
+            
+          - name: Set chart version 
+            id: set-version 
+            run: echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT 
+        
           # - name: Validate PROD inputs
           # # for prod deployments the tag input from the user must not be empty. -z does the empty string check
           #   run: |

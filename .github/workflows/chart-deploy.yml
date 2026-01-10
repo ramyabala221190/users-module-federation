@@ -25,9 +25,9 @@ on:
        description: "Specify the version of the helm artifacts"
        required: false
        
-# env:
-#  TAG: ${{ github.event.workflow_run.outputs.image_tag }} # default value
-#  VERSION: 
+env:
+ TAG: 0 # default value
+ VERSION: 0.0.0
 
 jobs:
   chart-deploy:
