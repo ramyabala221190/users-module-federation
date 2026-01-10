@@ -1,10 +1,14 @@
 name: Deploy-Chart
 
 on: 
-  workflow_run: 
-    workflows: ["Build-Deploy-Users-App"] # auto-trigger after Build-Deploy-Users-App finishes 
-    types: 
-     - completed
+  workflow_call: 
+    inputs:
+      image_tag:
+        required: true
+        type: number
+      chart_version:
+        required: false
+        type: string
   workflow_dispatch: # manual trigger from Github
    inputs:
      environment:
@@ -47,8 +51,8 @@ jobs:
                echo "workflow_run image_tag: $WORKFLOW_IMAGE_TAG"
                echo "workflow_run chart_version: $WORKFLOW_CHART_VERSION"
             env:
-             WORKFLOW_IMAGE_TAG: ${{ github.event.workflow_run.jobs.build-and-deploy.outputs.image_tag }}
-             WORKFLOW_CHART_VERSION: ${{ github.event.workflow_run.jobs.build-and-deploy.outputs.chart_version }}
+             WORKFLOW_IMAGE_TAG: ${{ inputs.image_tag }}
+             WORKFLOW_CHART_VERSION: ${{ inputs.chart_version}}
 
           - name: Set Docker Image tag 
             run: | 
@@ -59,7 +63,7 @@ jobs:
               fi 
             env: 
               INPUT_TAG: ${{ github.event.inputs.tag }} 
-              WORKFLOW_IMAGE_TAG: ${{ github.event.workflow_run.jobs.build-and-deploy.outputs.image_tag}}
+              WORKFLOW_IMAGE_TAG: ${{ inputs.image_tag }}
 
           - name: Set Helm Chart version
             run : |
@@ -70,7 +74,7 @@ jobs:
                   fi
             env: 
               INPUT_VERSION: ${{ github.event.inputs.version }} 
-              WORKFLOW_CHART_VERSION: ${{ github.event.workflow_run.jobs.build-and-deploy.outputs.chart_version }}
+              WORKFLOW_CHART_VERSION: ${{ inputs.chart_version }}
 
           
           - name: Debug

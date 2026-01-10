@@ -125,4 +125,10 @@ jobs:
           #      --install --debug \
           #      --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
           #      --set environment=${{ github.event.inputs.environment }}
+  
+  call-workflow-passing-data:
+    uses: ./.github/workflows/chart-deploy.yml
+    with:
+      image_tag: $TAG
+      chart_version: ${{ github.event.inputs.version }}
 
