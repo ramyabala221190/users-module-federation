@@ -31,7 +31,7 @@ on:
 jobs:
   chart-deploy:
        # Run if upstream workflow has completed and also succeeded OR if triggered manually 
-       if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}       
+       #if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}       
        runs-on: ubuntu-latest
        permissions: 
          id-token: write # required for OIDC 
