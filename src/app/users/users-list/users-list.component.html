@@ -3,6 +3,7 @@
     <tr>
         <th>USER ID</th>
         <th>Name</th>
+        <th>Email</th>
         <th></th>
     </tr>
 </thead>
@@ -10,6 +11,7 @@
     <tr *ngFor="let user of usersList$|async">
         <td>{{user.id}}</td>
         <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
         <td><button class="btn btn-success" [routerLink]="['/','users','detail',user.id]">View Details</button></td>
     </tr>
 </tbody>
