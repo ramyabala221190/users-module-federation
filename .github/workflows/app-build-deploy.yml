@@ -41,25 +41,25 @@ jobs:
              var3: This is step level env var accessible only in this step 
         
          
-          # - name: Login to DockerHub
-          # # executed only for dev
-          #   if: ${{ github.event.inputs.environment == 'dev' }}
-          #   uses: docker/login-action@v3
-          #   with:
-          #     username: ${{vars.DOCKERHUB_USERNAME}}
-          #     password: ${{secrets.DOCKERHUB_PASSWORD}}
-          #     # added the dockerhub username as repo variable and password as repo secret
+          - name: Login to DockerHub
+          # executed only for dev
+            if: ${{ github.event.inputs.environment == 'dev' }}
+            uses: docker/login-action@v3
+            with:
+              username: ${{vars.DOCKERHUB_USERNAME}}
+              password: ${{secrets.DOCKERHUB_PASSWORD}}
+              # added the dockerhub username as repo variable and password as repo secret
 
 
-          # - name: Build Docker image for Users app
-          # # executed only for dev
-          #   if: ${{ github.event.inputs.environment == 'dev' }}
-          #   uses: docker/build-push-action@v5
-          #   with:
-          #     push: true  # so that image is pushed to Dockerhub as well
-          #     context: .   # this ensures the paths in the Dockerfile work as expected
-          #     file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
-          #     tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
+          - name: Build Docker image for Users app
+          # executed only for dev
+            if: ${{ github.event.inputs.environment == 'dev' }}
+            uses: docker/build-push-action@v5
+            with:
+              push: true  # so that image is pushed to Dockerhub as well
+              context: .   # this ensures the paths in the Dockerfile work as expected
+              file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
+              tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
 
           # - name: Azure CLI Upgrade
           #   run: |

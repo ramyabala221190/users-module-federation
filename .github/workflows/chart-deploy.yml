@@ -31,7 +31,6 @@ on:
 jobs:
   chart-deploy:
        # Run if upstream workflow has completed and also succeeded OR if triggered manually 
-       #if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}       
        runs-on: ubuntu-latest
       #  permissions: 
       #    id-token: write # required for OIDC 
@@ -91,51 +90,51 @@ jobs:
              fi
           
           
-          # - name: Azure CLI Upgrade
-          #   run: |
-          #     az upgrade --yes
-          #     az version
+          - name: Azure CLI Upgrade
+            run: |
+              az upgrade --yes
+              az version
           
-          # - name: Azure Login
-          #   uses: azure/login@v2.3.0
-          #   with:
-          #      client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
-          #      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          #      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          - name: Azure Login
+            uses: azure/login@v2.3.0
+            with:
+               client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
+               tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+               subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
-          # - name: Set AKS context 
-          #   uses: azure/aks-set-context@v3 
-          #   with: 
-          #     resource-group : ${{vars.AZURE_RESOURCE_GROUP}} 
-          #     cluster-name: ${{vars.AZURE_CLUSTER_NAME}}
+          - name: Set AKS context 
+            uses: azure/aks-set-context@v3 
+            with: 
+              resource-group : ${{vars.AZURE_RESOURCE_GROUP}} 
+              cluster-name: ${{vars.AZURE_CLUSTER_NAME}}
 
-          # - name: Get AKS credentials (admin bypass) 
-          #   run: | 
-          #     az aks get-credentials --resource-group ${{vars.AZURE_RESOURCE_GROUP}}  --name ${{vars.AZURE_CLUSTER_NAME}} --admin --overwrite-existing
+          - name: Get AKS credentials (admin bypass) 
+            run: | 
+              az aks get-credentials --resource-group ${{vars.AZURE_RESOURCE_GROUP}}  --name ${{vars.AZURE_CLUSTER_NAME}} --admin --overwrite-existing
 
-          # - name : Create Namespace and Set context
-          #   run: |
-          #      kubectl create namespace ${{ github.event.inputs.environment }}-namespace --dry-run=client -o yaml | kubectl apply -f -
-          #      kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
+          - name : Create Namespace and Set context
+            run: |
+               kubectl create namespace ${{ github.event.inputs.environment }}-namespace --dry-run=client -o yaml | kubectl apply -f -
+               kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
 
-          # - name: Login to Docker Hub for Helm 
-          #   env: 
-          #     DOCKERHUB_REGISTRY_USERNAME: ${{ vars.DOCKERHUB_USERNAME }} 
-          #     DOCKERHUB_REGISTRY_PA_TOKEN: ${{ secrets.DOCKERHUB_PA_TOKEN }} 
-          #   run: | 
-          #     helm registry login registry-1.docker.io --username "$DOCKERHUB_REGISTRY_USERNAME" --password "$DOCKERHUB_REGISTRY_PA_TOKEN"
+          - name: Login to Docker Hub for Helm 
+            env: 
+              DOCKERHUB_REGISTRY_USERNAME: ${{ vars.DOCKERHUB_USERNAME }} 
+              DOCKERHUB_REGISTRY_PA_TOKEN: ${{ secrets.DOCKERHUB_PA_TOKEN }} 
+            run: | 
+              helm registry login registry-1.docker.io --username "$DOCKERHUB_REGISTRY_USERNAME" --password "$DOCKERHUB_REGISTRY_PA_TOKEN"
           
-          # - name: Helm package and push to DockerHub
-          #   if: ${{ github.event.inputs.environment == 'dev' }}
-          #   run : |
-          #      helm package --version=$VERSION ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
-          #      helm push ./artifacts/${{vars.HELM_CHART_NAME}}-$VERSION.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/
+          - name: Helm package and push to DockerHub
+            if: ${{ github.event.inputs.environment == 'dev' }}
+            run : |
+               helm package --version=$VERSION ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
+               helm push ./artifacts/${{vars.HELM_CHART_NAME}}-$VERSION.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/
           
-          # - name: Helm Upgrade
-          #   run: |
-          #      helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/${{vars.HELM_CHART_NAME}} \
-          #      --version $VERSION \
-          #      --install --debug \
-          #      --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:$TAG  \
-          #      --set environment=${{ github.event.inputs.environment }}
+          - name: Helm Upgrade
+            run: |
+               helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/${{vars.HELM_CHART_NAME}} \
+               --version $VERSION \
+               --install --debug \
+               --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:$TAG  \
+               --set environment=${{ github.event.inputs.environment }}
 
