@@ -35,9 +35,9 @@ jobs:
   chart-deploy:
        # Run if upstream workflow has completed and also succeeded OR if triggered manually 
        runs-on: ubuntu-latest
-       permissions: 
-         id-token: write # required for OIDC 
-         contents: read # required for actions/checkout
+      #  permissions: 
+      #    id-token: write # required for OIDC 
+      #    contents: read # required for actions/checkout
 
        env:
         var2: This is job level env var accessible in all steps
