@@ -1,0 +1,3 @@
+#Place the .helmignore file in the base directory of your chart (the same location as your Chart.yaml file).
+
+*.md

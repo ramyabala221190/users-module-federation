@@ -1,7 +1,7 @@
 name: Deploy-Chart
 
 on: 
-  workflow_call: 
+  workflow_call: # this is required when called in another workflow
     inputs:
       image_tag:
         required: true
@@ -35,6 +35,7 @@ jobs:
   chart-deploy:
        # Run if upstream workflow has completed and also succeeded OR if triggered manually 
        runs-on: ubuntu-latest
+       # peromissions are required here as well in case we execute this as a seperate workflow
        permissions: 
          id-token: write # required for OIDC 
          contents: read # required for actions/checkout

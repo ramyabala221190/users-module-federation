@@ -12,10 +12,6 @@ on:
         required: true
         default: 'dev'
       
-    #  tag:
-    #   description: "Specify the docker image tag to be pulled for prod/uat"
-    #   required: false
-     
      version:
        description: "Specify the version of the helm artifacts"
        required: true
@@ -61,63 +57,16 @@ jobs:
               file: ./docker/Dockerfile  # this ensures the Dockerfile is located in the correct folder
               tags: ${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}
 
-          # - name: Azure CLI Upgrade
-          #   run: |
-          #     az upgrade --yes
-          #     az version
-          
-          # - name: Azure Login
-          #   uses: azure/login@v2.3.0
-          #   with:
-          #      client-id: ${{ secrets.AZURE_APP_CLIENT_ID }}
-          #      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          #      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          
-          # - name: Set AKS context 
-          #   uses: azure/aks-set-context@v3 
-          #   with: 
-          #     resource-group : ${{vars.AZURE_RESOURCE_GROUP}} 
-          #     cluster-name: ${{vars.AZURE_CLUSTER_NAME}}
-
-          # - name: Get AKS credentials (admin bypass) 
-          #   run: | 
-          #     az aks get-credentials --resource-group ${{vars.AZURE_RESOURCE_GROUP}}  --name ${{vars.AZURE_CLUSTER_NAME}} --admin --overwrite-existing
-
-          # - name : Create Namespace and Set context
-          #   run: |
-          #      kubectl create namespace ${{ github.event.inputs.environment }}-namespace --dry-run=client -o yaml | kubectl apply -f -
-          #      kubectl config set-context --current --namespace=${{ github.event.inputs.environment }}-namespace
-
-          # - name: Login to Docker Hub for Helm 
-          #   env: 
-          #     DOCKERHUB_REGISTRY_USERNAME: ${{ vars.DOCKERHUB_USERNAME }} 
-          #     DOCKERHUB_REGISTRY_PA_TOKEN: ${{ secrets.DOCKERHUB_PA_TOKEN }} 
-          #   run: | 
-          #     helm registry login registry-1.docker.io --username "$DOCKERHUB_REGISTRY_USERNAME" --password "$DOCKERHUB_REGISTRY_PA_TOKEN"
-          
-          # - name: Helm package and push to DockerHub
-          #   if: ${{ github.event.inputs.environment == 'dev' }}
-          #   run : |
-          #      helm package --version=${{ github.event.inputs.version }} ./charts/${{vars.HELM_CHART_NAME}}/ --destination ./artifacts
-          #      helm push ./artifacts/${{vars.HELM_CHART_NAME}}-${{ github.event.inputs.version }}.tgz oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/
-          
-          # - name: Helm Upgrade
-          #   run: |
-          #      helm upgrade ${{vars.APP_NAME}}-release oci://registry-1.docker.io/${{vars.DOCKERHUB_USERNAME}}/${{vars.HELM_CHART_NAME}} \
-          #      --version ${{ github.event.inputs.version }} \
-          #      --install --debug \
-          #      --set pod.imageName=${{vars.DOCKERHUB_USERNAME}}/${{vars.APP_NAME}}:${{env.TAG}}  \
-          #      --set environment=${{ github.event.inputs.environment }}
-  
+         
   helm-upgrade:
-    needs: build-and-deploy
-    permissions: 
+    needs: build-and-deploy  # execute in sequence. The build-and-deploy job needs to complete first
+    permissions:  # these are required for azure login
          id-token: write # required for OIDC 
          contents: read # required for actions/checkout
-    uses: ./.github/workflows/chart-deploy.yml
-    with:
+    uses: ./.github/workflows/chart-deploy.yml  # path to the workflow to be executed
+    with:  # input parameters to be passed
       image_tag: ${{ github.run_id }} 
       chart_version: ${{ github.event.inputs.version }}
       environment: ${{ github.event.inputs.environment }}
-    secrets: inherit
+    secrets: inherit  # github secrets can be inherited from the current workflow. v.imp for secrets to work in the called workflow
 
