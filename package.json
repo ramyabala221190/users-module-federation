@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "run:all": "node node_modules/@angular-architects/module-federation/src/server/mf-dev-server.js",
-    "build-docker":"docker build -f docker/Dockerfile -t users-app:7 .",
+    "build-docker":"docker build -f docker/Dockerfile -t users-app:25 .",
      "start-dev":"npm run build-docker && npm run create-namespace-dev && npm run set-context-dev && npm run helm-pack && npm run helm-upgrade-dev",
     "start-uat":"npm run create-namespace-uat && npm run set-context-uat && npm run helm-upgrade-uat",
     "start-prod":"npm run create-namespace-prod && npm run set-context-prod && npm run helm-upgrade-prod",
@@ -19,9 +19,9 @@
     "set-context-uat":"kubectl config set-context --current --namespace=uat-namespace",
     "set-context-prod":"kubectl config set-context --current --namespace=prod-namespace",
     "helm-pack":"helm package --version=1.0.1 ./charts/angular-users-app-module-federation/ --destination ./artifacts",
-    "helm-upgrade-dev":"helm upgrade users-app-release ./charts/angular-users-app-module-federation/ --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:7 --set environment=dev",
-    "helm-upgrade-uat":"helm upgrade users-app-release ./artifacts/angular-users-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:7 --set environment=uat",
-    "helm-upgrade-prod":"helm upgrade users-app-release ./artifacts/angular-users-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:7 --set environment=prod"
+    "helm-upgrade-dev":"helm upgrade users-app-release ./charts/angular-users-app-module-federation/ --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:25 --set environment=dev",
+    "helm-upgrade-uat":"helm upgrade users-app-release ./artifacts/angular-users-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:25 --set environment=uat",
+    "helm-upgrade-prod":"helm upgrade users-app-release ./artifacts/angular-users-app-module-federation-1.0.1.tgz --install --debug --values ./charts/angular-users-app-module-federation/values.yaml --set pod.imageName=users-app:25 --set environment=prod"
 
   },
   "private": true,
